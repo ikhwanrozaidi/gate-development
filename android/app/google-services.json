@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "1065806146616",
+    "project_id": "gatepay-dbcf1",
+    "storage_bucket": "gatepay-dbcf1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065806146616:android:89bb9bb5d2c9f8a0058acd",
+        "android_client_info": {
+          "package_name": "com.example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoch_MpHtvdPZKey3BngriVuzI4020xr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065806146616:android:629f8620222dc545058acd",
+        "android_client_info": {
+          "package_name": "com.example.gate_convert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoch_MpHtvdPZKey3BngriVuzI4020xr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065806146616:android:63c8a943684d67be058acd",
+        "android_client_info": {
+          "package_name": "com.example.gatepay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoch_MpHtvdPZKey3BngriVuzI4020xr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

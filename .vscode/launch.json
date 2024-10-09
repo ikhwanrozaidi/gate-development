@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(prod) gatepay_convert",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "dev",
+                "--dart-define=BASE_URL=https://us-central1-gatepay-dbcf1.cloudfunctions.net",
+            ],
+            "flutterMode": "release"
+        },
+        {
+            "name": "(dev) gatepay_convert",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "dev",
+                "--dart-define=BASE_URL=https://us-central1-gatepay-dbcf1.cloudfunctions.net",
+            ],
+            "flutterMode": "debug"
+        },
+        {
+            "name": "(dev-debug) gatepay_convert",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "dev",
+                "--dart-define=BASE_URL=https://us-central1-gatepay-dbcf1.cloudfunctions.net",
+            ],
+            "flutterMode": "debug"
+        }
+    ]
+}

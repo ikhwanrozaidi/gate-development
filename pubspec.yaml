@@ -1,0 +1,70 @@
+name: gatepay_convert
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  flutter_riverpod: ^2.4.1
+  dio: ^5.3.3
+  dio_cookie_manager: ^3.1.1
+  intl: ^0.18.1
+  equatable: ^2.0.5
+  shimmer: ^3.0.0
+  lottie: ^2.7.0
+  freezed: ^2.4.5
+  freezed_annotation: ^2.4.1
+  dots_indicator: ^2.1.1
+  google_fonts: ^5.1.0
+  firebase_core: ^2.24.2
+  cloud_firestore: ^4.13.6
+  firebase_storage: ^11.5.6
+  firebase_auth: ^4.15.3
+  firebase_database: ^10.3.8
+  shared_preferences: ^2.1.1
+  flutter_secure_storage: ^8.0.0
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.6
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/pageview-1.png
+    - assets/images/pageview-2.png
+    - assets/images/pageview-3.png
+    - assets/images/logo-berrypay.png
+    - assets/images/logo-gatepay.png
+    - assets/images/bg-mainCard.png
+    - assets/lottie/lottie-unplug.json
+    - assets/lottie/lottie-loading.json
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.otf
+        - asset: assets/fonts/Montserrat-Medium.otf
+        - asset: assets/fonts/Montserrat-Light.otf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Light.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/Inter-Light.ttf
