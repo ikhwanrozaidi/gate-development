@@ -32,7 +32,7 @@ class SignUpNotifier extends AutoDisposeNotifier<SignUpState> {
       Map<String, dynamic> additionalData) async {
     state = SignUpLoading();
     var rng = Random();
-    var randomNumber = (rng.nextInt(900000000) + 100000000);
+    var randomNumber = (rng.nextInt(9000000000000) + 1000000000000);
 
     additionalData['accountNumber'] = randomNumber.toString();
 

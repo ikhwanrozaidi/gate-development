@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'firebase_options.dart';
 import 'app.dart';
+import 'shared/services/config.dart';
 import 'shared/services/storage/storage.dart';
 
 void main() async {
@@ -18,6 +19,7 @@ void main() async {
   final container = ProviderContainer();
   final storageService = container.read(storageServiceProvider);
   await storageService.initStorage();
+  EnvironmentConfig.setEnvironment(Environment.staging);
 
   // Run the app
   runApp(

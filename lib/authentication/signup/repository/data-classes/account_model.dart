@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'account_model.g.dart';
 
 @JsonSerializable()
-class Account {
+class AccountModel {
   @JsonKey(defaultValue: '')
   final String accountId;
 
@@ -66,7 +66,7 @@ class Account {
 
 
 
-  Account({
+  AccountModel({
     required this.accountId,
     this.businessName = '',
     this.username = '',
@@ -89,9 +89,9 @@ class Account {
     this.createdAt,
   });
 
-  factory Account.fromJson(Map<String, dynamic> json) => _$AccountFromJson(json);
+  factory AccountModel.fromJson(Map<String, dynamic> json) => _$AccountModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AccountToJson(this);
+  Map<String, dynamic> toJson() => _$AccountModelToJson(this);
 }
 
 @JsonSerializable()

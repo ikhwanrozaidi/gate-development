@@ -1,6 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gatepay_convert/profile/notifier/profile_state.dart';
+import 'dart:developer';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'profile_state.dart';
 import '../repository/service/profile_service.dart';
 
 final profileNotifierProvider =
@@ -10,19 +11,32 @@ final profileNotifierProvider =
 class ProfileNotifier extends AutoDisposeNotifier<ProfileState> {
   @override
   ProfileState build() {
-    getUserDetails();
+    userDetails();
     return ProfileLoading();
   }
 
   ProfileApiService get profileApiService =>
       ref.read(profileApiServiceProvider);
 
-  Future<void> getUserDetails() async {
+  Future<void> userDetails() async {
     try {
       state = ProfileLoading();
       final userData = await profileApiService.getUserDetails();
 
-      state = ProfileLoaded(userData);
+      if (userData != null) {
+        state = ProfileLoaded(userData);
+      } else {
+        state = ProfileError('User data not found');
+      }
+    } catch (e) {
+      state = ProfileError(e.toString());
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await profileApiService.signOut();
+      state = ProfileInitial();
     } catch (e) {
       state = ProfileError(e.toString());
     }

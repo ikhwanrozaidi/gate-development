@@ -7,10 +7,13 @@ import 'package:gatepay_convert/dashboard/currency_wallet/screens/currencywallet
 import 'package:gatepay_convert/dashboard/request_pay/screens/requestpay_page.dart';
 import 'package:gatepay_convert/pay_boarding/screens/pay_boarding_page.dart';
 import 'package:gatepay_convert/shared/utils/flags_imagenetwork.dart';
+import 'package:gatepay_convert/topup/screens/topup_page.dart';
+import 'package:gatepay_convert/withdraw/screens/withdraw_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../shared/utils/blurred_bg_loading.dart';
 import '../../../shared/utils/theme.dart';
+import '../../shared/utils/price_formatter.dart';
 import '../notifier/dashboard_notifier.dart';
 import '../notifier/dashboard_state.dart';
 
@@ -35,6 +38,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     } else {
       return 'Good Evening';
     }
+  }
+
+  String formatAccountNumber(String accountNumber) {
+    return accountNumber.replaceAllMapped(
+        RegExp(r'.{4}'), (match) => '${match.group(0)} ');
   }
 
   @override
@@ -108,7 +116,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                           ),
                         ),
                         Text(
-                          '${getGreeting()}, Enquiry!',
+                          '${getGreeting()}, ${state.userData.lastName}!',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: w * 0.045,
@@ -125,7 +133,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                       ),
                       child: Center(
                           child: Text(
-                        'IR',
+                        '${state.userData.firstName.split(' ').first[0].toUpperCase()}${state.userData.lastName.split(' ').first[0].toUpperCase()}',
                         style: TextStyle(
                           fontFamily: tSecondaryFont,
                           fontWeight: FontWeight.w600,
@@ -157,14 +165,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                           Container(
                             margin: EdgeInsets.only(top: 5),
                             child: Text(
-                              'BerryPay x GatePay',
+                              'GatePay',
                               style: GoogleFonts.inter(
                                 color: Colors.white,
                               ),
                             ),
                           ),
                           Text(
-                            '8004 8000 01225',
+                            formatAccountNumber(
+                                state.defaultAccount.accountNumber),
                             style: GoogleFonts.inter(
                               color: Colors.white,
                               fontSize: w * 0.06,
@@ -175,7 +184,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Enquiry ss',
+                                '${state.userData.firstName} ${state.userData.lastName}',
                                 style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: w * 0.03,
@@ -183,7 +192,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                                 ),
                               ),
                               Text(
-                                'MYR 12,287.10',
+                                'MYR ${state.defaultAccount.balance.withComma()}',
                                 style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
@@ -261,7 +270,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                       ),
                       SizedBox(height: 15),
                       Text(
-                        '10,250.00',
+                        state.defaultAccount.balance.withComma(),
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w600,
                           fontSize: w * 0.05,
@@ -340,7 +349,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     quickActionButton(
                         icon: Icons.control_point_duplicate,
                         title: 'Topup',
-                        navigateTo: TestPage1()),
+                        navigateTo: TopupPage()),
                     quickActionButton(
                         icon: Icons.payment,
                         title: 'Pay',
@@ -352,7 +361,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                     quickActionButton(
                         icon: Icons.account_balance,
                         title: 'Withdraw',
-                        navigateTo: TestPage4()),
+                        navigateTo: WithdrawPage()),
                     quickActionButton(
                         icon: Icons.compare_arrows,
                         title: 'Transfer',
@@ -489,11 +498,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final w = MediaQuery.of(context).size.width;
 
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        final result = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => navigateTo),
         );
+
+        if (result == true) {
+          ref.read(dashboardNotifierProvider.notifier).initialDashboard();
+        }
       },
       child: Column(
         children: [

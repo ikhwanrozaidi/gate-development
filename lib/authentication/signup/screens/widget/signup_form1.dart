@@ -35,6 +35,11 @@ class _SignUpForm1State extends ConsumerState<SignUpForm1> {
   final TextEditingController _countryController = TextEditingController();
 
   void _continueToNextForm() {
+    String capitalizeFirstLetter(String text) {
+      if (text.isEmpty) return "";
+      return text[0].toUpperCase() + text.substring(1).toLowerCase();
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -42,9 +47,9 @@ class _SignUpForm1State extends ConsumerState<SignUpForm1> {
           email: widget.email,
           password: widget.password,
           title: _titleController.text,
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          country: _countryController.text,
+          firstName: capitalizeFirstLetter(_firstNameController.text),
+          lastName: capitalizeFirstLetter(_lastNameController.text),
+          country: capitalizeFirstLetter(_countryController.text),
         ),
       ),
     );

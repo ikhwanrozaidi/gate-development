@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gatepay_convert/verification/screens/verification_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../shared/utils/blurred_bg_loading.dart';
@@ -70,7 +71,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               ),
                               child: Center(
                                   child: Text(
-                                '${state.userData['firstName'].split(' ').first[0].toUpperCase()}${state.userData['lastName'].split(' ').first[0].toUpperCase()}',
+                                '${state.userData.firstName.split(' ').first[0].toUpperCase()}${state.userData.lastName.split(' ').first[0].toUpperCase()}',
                                 style: TextStyle(
                                   fontFamily: tSecondaryFont,
                                   fontWeight: FontWeight.w600,
@@ -82,14 +83,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${state.userData['firstName'].split(' ').map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ')} ${state.userData['lastName'].split(' ').map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ')}',
+                                  '${state.userData.firstName.split(' ').map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ')} ${state.userData.lastName.split(' ').map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ')}',
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  state.userData['country'] ??
-                                      'Country not set',
+                                  state.userData.country ?? 'Country not set',
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                       color: Colors.grey),
@@ -115,7 +115,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           ),
                           SizedBox(width: 20),
                           Text(
-                            state.userData['phone'] ?? 'Phone not set',
+                            (state.userData.phone == '')
+                                ? "Verify your phone number"
+                                : state.userData.phone,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               color: Colors.grey,
@@ -135,7 +137,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           ),
                           SizedBox(width: 20),
                           Text(
-                            state.userData['email'] ?? 'Email not set',
+                            state.userData.email ?? 'Email not set',
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               color: Colors.grey,
@@ -173,7 +175,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VerifyPage()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: tPrimaryColorShade3,
                               padding: EdgeInsets.symmetric(
@@ -397,9 +405,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ),
       );
     } else if (state is ProfileError) {
-      bodyContent = serverErrorHolder(ref.read(profileNotifierProvider.notifier).getUserDetails());
+      bodyContent = serverErrorHolder(
+          ref.read(profileNotifierProvider.notifier).userDetails());
     } else {
-      bodyContent = serverErrorHolder(ref.read(profileNotifierProvider.notifier).getUserDetails());
+      bodyContent = serverErrorHolder(
+          ref.read(profileNotifierProvider.notifier).userDetails());
     }
 
     return Scaffold(

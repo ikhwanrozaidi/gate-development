@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../authentication/signup/repository/data-classes/user_model.dart';
 
 abstract class ProfileState extends Equatable {
   const ProfileState();
@@ -12,7 +13,7 @@ class ProfileInitial extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final Map<String, dynamic> userData;
+  final UserModel userData;
 
   const ProfileLoaded(this.userData);
 

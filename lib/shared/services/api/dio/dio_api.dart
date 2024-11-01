@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import '../../config.dart';
 import '../api.dart';
-import '../../../utils/environment_config.dart';
 import 'dio_config.dart';
 
 class DioApiService extends ApiService {

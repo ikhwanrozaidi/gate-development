@@ -93,7 +93,7 @@ class SignUpApiService extends SignUpService {
         updatedAt: DateTime.now(),
       );
 
-      final account = Account(
+      final account = AccountModel(
         accountId: FirebaseFirestore.instance
             .collection('staging')
             .doc('staging')

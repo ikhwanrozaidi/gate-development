@@ -6,7 +6,7 @@ part of 'account_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Account _$AccountFromJson(Map<String, dynamic> json) => Account(
+AccountModel _$AccountModelFromJson(Map<String, dynamic> json) => AccountModel(
       accountId: json['accountId'] as String? ?? '',
       businessName: json['businessName'] as String? ?? '',
       username: json['username'] as String? ?? '',
@@ -39,7 +39,8 @@ Account _$AccountFromJson(Map<String, dynamic> json) => Account(
           : DateTime.parse(json['createdAt'] as String),
     );
 
-Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
+Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
+    <String, dynamic>{
       'accountId': instance.accountId,
       'businessName': instance.businessName,
       'username': instance.username,
