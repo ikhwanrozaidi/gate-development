@@ -10,7 +10,7 @@ import '../../../shared/utils/theme.dart';
 import '../../shared/utils/custom_snackbar.dart';
 import '../notifier/verification_notifier.dart';
 import '../notifier/verification_state.dart';
-import 'widgets/verification_form2.dart';
+import 'widgets/verification_form1.dart';
 
 class VerifyPage extends ConsumerStatefulWidget {
   final String? title;
@@ -27,6 +27,7 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
   bool isOtpVerified = false;
   bool isSendOtp = false;
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   Color _getBorderColor(VerifyState state) {
     if (state is VerifyLoaded) {
@@ -295,6 +296,8 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
                   SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
+
                       String otp =
                           digit1.text + digit2.text + digit3.text + digit4.text;
                       if (otp == "0000") {
@@ -346,201 +349,210 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
 
     Widget bodyContent;
     if (state is VerifyLoaded) {
-      bodyContent = SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: w * 0.03),
-              Text(
-                "Just a few moments...",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: w * 0.07,
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                "Let's verify your account before make any transactions",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade500,
-                  // fontSize: w * 0.07,
-                ),
-              ),
-              SizedBox(height: 60),
-              Text(
-                "Pick a username",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: _usernameController,
-                style: TextStyle(
-                  fontFamily: tSecondaryFont,
-                  fontWeight: FontWeight.w500,
-                ),
-                onChanged: (value) {
-                  // Debounce the username check to avoid too many calls
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    if (_usernameController.text == value) {
-                      ref
-                          .read(verifyNotifierProvider.notifier)
-                          .checkUsername(value);
-                    }
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: tPrimaryBackground,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                      color: _getBorderColor(state),
-                      width: 2,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                      color: _getBorderColor(state),
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                      color: _getBorderColor(state),
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: _getSuffixIcon(state),
-                  helperText: _getHelperText(state),
-                  helperStyle: TextStyle(
-                    color: _getBorderColor(state),
+      bodyContent = GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: w * 0.03),
+                Text(
+                  "Just a few moments...",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: w * 0.07,
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Phone Number",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Container(
-                    height: 60,
-                    width: w / 3.5,
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: tPrimaryBackground,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 30.0,
-                          height: 30.0,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "+60",
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                SizedBox(height: 5),
+                Text(
+                  "Let's verify your account before make any transactions",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade500,
+                    // fontSize: w * 0.07,
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.phone,
-                      style: TextStyle(
-                        fontFamily: tSecondaryFont,
-                        fontWeight: FontWeight.w500,
+                ),
+                SizedBox(height: 60),
+                Text(
+                  "Pick a username",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _usernameController,
+                  style: TextStyle(
+                    fontFamily: tSecondaryFont,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  onChanged: (value) {
+                    // Debounce the username check to avoid too many calls
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      if (_usernameController.text == value) {
+                        ref
+                            .read(verifyNotifierProvider.notifier)
+                            .checkUsername(value);
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: tPrimaryBackground,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: _getBorderColor(state),
+                        width: 2,
                       ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: tPrimaryBackground,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        constraints: BoxConstraints(maxHeight: 60),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: _getBorderColor(state),
+                        width: 2,
                       ),
-                      validator: (value) {
-                        return null;
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: _getBorderColor(state),
+                        width: 2,
+                      ),
+                    ),
+                    suffixIcon: _getSuffixIcon(state),
+                    helperText: _getHelperText(state),
+                    helperStyle: TextStyle(
+                      color: _getBorderColor(state),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Phone Number",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: w / 3.5,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: tPrimaryBackground,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 30.0,
+                            height: 30.0,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "+60",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
+                        style: TextStyle(
+                          fontFamily: tSecondaryFont,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: tPrimaryBackground,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          constraints: BoxConstraints(maxHeight: 60),
+                        ),
+                        validator: (value) {
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showSnackBar(
+                            context, 'OTP has been sent to registered phone');
                       },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showSnackBar(
-                          context, 'OTP has been sent to registered phone');
-                    },
-                    child: Text(
-                      isSendOtp ? "Resend OTP" : "",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 147, 171, 255),
-                        fontFamily: tSecondaryFont,
-                        fontSize: w * 0.035,
+                      child: Text(
+                        isSendOtp ? "Resend OTP" : "",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 147, 171, 255),
+                          fontFamily: tSecondaryFont,
+                          fontSize: w * 0.035,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: w / 3,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: isOtpVerified
-                        ? () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => VerifyForm2()),
-                            );
-                          }
-                        : () {
-                            setState(() {
-                              isSendOtp = true;
-                            });
-                            showOtpBottomSheet(context);
-                          },
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(20),
-                      backgroundColor: tPrimaryColor,
-                      shape: CircleBorder(),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
+                  ],
+                ),
+                SizedBox(
+                  height: w / 3,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: isOtpVerified
+                          ? () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VerifyForm1(
+                                          username: _usernameController.text,
+                                          phone: _phoneController.text,
+                                        )),
+                              );
+                            }
+                          : () {
+                              setState(() {
+                                isSendOtp = true;
+                              });
+                              showOtpBottomSheet(context);
+                            },
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(20),
+                        backgroundColor: tPrimaryColor,
+                        shape: CircleBorder(),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );

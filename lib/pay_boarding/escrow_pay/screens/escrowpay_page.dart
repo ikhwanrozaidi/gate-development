@@ -165,190 +165,195 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
 
     Widget bodyContent;
     if (state is EscrowpayLoaded) {
-      bodyContent = SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: w * 0.05),
-                Text(
-                  "Good Choice! We need a bit two info",
-                  style: TextStyle(
-                    fontFamily: tSecondaryFont,
-                    fontWeight: FontWeight.w700,
-                    fontSize: w * 0.06,
-                  ),
-                ),
-                SizedBox(height: 40),
-                Text(
-                  'Product Name',
-                  style: TextStyle(
-                    fontFamily: tSecondaryFont,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  style: TextStyle(
-                    fontFamily: tSecondaryFont,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: tPrimaryBackground,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
+      bodyContent = GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: w * 0.05),
+                  Text(
+                    "Good Choice! We need a bit two info",
+                    style: TextStyle(
+                      fontFamily: tSecondaryFont,
+                      fontWeight: FontWeight.w700,
+                      fontSize: w * 0.06,
                     ),
                   ),
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Product Description',
-                  style: TextStyle(
-                    fontFamily: tSecondaryFont,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  style: TextStyle(
-                    fontFamily: tSecondaryFont,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: tPrimaryBackground,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
+                  SizedBox(height: 40),
+                  Text(
+                    'Product Name',
+                    style: TextStyle(
+                      fontFamily: tSecondaryFont,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Price',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: tPrimaryBackground,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Seller Receive (MYR)',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: w * 0.035,
-                              ),
-                            ),
-                            TextFormField(
-                              controller: youPayController,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d*\.?\d*')),
-                              ],
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    style: TextStyle(
+                      fontFamily: tSecondaryFont,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: tPrimaryBackground,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: tPrimaryBackground,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'You Pay (MYR)',
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400,
-                                fontSize: w * 0.035,
-                              ),
-                            ),
-                            TextFormField(
-                              controller: sellerReceiveController,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d*\.?\d*')),
-                              ],
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Product Description',
+                    style: TextStyle(
+                      fontFamily: tSecondaryFont,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    style: TextStyle(
+                      fontFamily: tSecondaryFont,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: tPrimaryBackground,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 60),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EscrowpayForm2()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(20),
-                        backgroundColor: tPrimaryColor,
-                        shape: CircleBorder(),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Price',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: tPrimaryBackground,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Seller Receive (MYR)',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: w * 0.035,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: youPayController,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^\d*\.?\d*')),
+                                ],
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: tPrimaryBackground,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'You Pay (MYR)',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: w * 0.035,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: sellerReceiveController,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^\d*\.?\d*')),
+                                ],
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 60),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EscrowpayForm2()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(20),
+                          backgroundColor: tPrimaryColor,
+                          shape: CircleBorder(),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+        ),
       );
     } else if (state is EscrowpayLoading) {
       bodyContent = Center(

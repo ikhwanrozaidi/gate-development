@@ -53,16 +53,16 @@ class VerifyApiService extends VerifyService {
     }
   }
 
-  Future<void> updateUsername(String username) async {
+  Future<void> updateVerification(String username, String phone) async {
     try {
       User? user = auth.currentUser;
       if (user != null) {
-        // Update the user's document with the new username
         await FirebaseFirestore.instance
             .collection(EnvironmentConfig.usersCollection)
             .doc(user.uid)
             .update({
           'username': username.toLowerCase(),
+          'phone': phone,
           'updatedAt': DateTime.now(),
         });
 

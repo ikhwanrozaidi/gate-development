@@ -114,15 +114,39 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             color: Colors.grey,
                           ),
                           SizedBox(width: 20),
-                          Text(
-                            (state.userData.phone == '')
-                                ? "Verify your phone number"
-                                : state.userData.phone,
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey,
-                            ),
-                          )
+                          (state.userData.phone == '')
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VerifyPage()),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Verify your phone number",
+                                    style: GoogleFonts.poppins(
+                                      color: tPrimaryColorShade3,
+                                      fontSize: w * 0.035,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                )
+                              : state.userData.isVerify
+                                  ? Text(
+                                      state.userData.phone,
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Verifying your account...',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.orange,
+                                      ),
+                                    )
                         ],
                       ),
                     ),
@@ -139,7 +163,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           Text(
                             state.userData.email ?? 'Email not set',
                             style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Colors.grey,
                             ),
                           )
@@ -149,61 +173,63 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Divider(color: Colors.grey.shade300),
-              SizedBox(height: 40),
+              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: tPrimaryColorShade2,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Get account verification now?',
-                            style: GoogleFonts.poppins(
-                              //fontWeight: FontWeight.w500,
-                              fontSize: w * 0.035,
-                              color: tPrimaryColorShade3,
+                    state.userData.phone != '' && state.userData.username != ''
+                        ? SizedBox(height: 0)
+                        : Container(
+                            margin: EdgeInsets.only(bottom: 40),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: tPrimaryColorShade2,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Get account verification now?',
+                                  style: GoogleFonts.poppins(
+                                    //fontWeight: FontWeight.w500,
+                                    fontSize: w * 0.035,
+                                    color: tPrimaryColorShade3,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VerifyPage()),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: tPrimaryColorShade3,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    minimumSize: Size(64, 30),
+                                    visualDensity: VisualDensity.compact,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Verify',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VerifyPage()),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: tPrimaryColorShade3,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              minimumSize: Size(64, 30),
-                              visualDensity: VisualDensity.compact,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            child: Text(
-                              'Verify',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 40),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       margin: EdgeInsets.only(bottom: 20),
@@ -391,8 +417,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               ),
               SizedBox(height: 40),
-              Text('Powered by BerryPay'),
-              SizedBox(height: 40),
+              // Text('Powered by BerryPay'),
+              // SizedBox(height: 40),
             ],
           ),
         ),
