@@ -40,39 +40,36 @@ class VerifyApiService extends VerifyService {
     try {
       if (username.isEmpty) return false;
 
-      // First check the reserved usernames collection
-      DocumentSnapshot usernameDoc = await FirebaseFirestore.instance
-          .collection('staging')
-          .doc('staging')
-          .collection('usernames')
-          .doc(username.toLowerCase())
+      // Search in users collection
+      QuerySnapshot usersQuery = await FirebaseFirestore.instance
+          .collection(EnvironmentConfig.usersCollection)
+          .where('username', isEqualTo: username.toLowerCase())
           .get();
 
-      return !usernameDoc.exists;
+      return usersQuery.docs.isEmpty;
     } catch (e) {
       log('Error checking username: $e');
       throw e;
     }
   }
 
-  Future<void> reserveUsername(String username) async {
+  Future<void> updateUsername(String username) async {
     try {
       User? user = auth.currentUser;
       if (user != null) {
-        // Add username to reserved collection
+        // Update the user's document with the new username
         await FirebaseFirestore.instance
-            .collection('staging')
-            .doc('staging')
-            .collection('usernames')
-            .doc(username.toLowerCase())
-            .set({
-          'userId': user.uid,
-          'username': username,
-          'reservedAt': DateTime.now(),
+            .collection(EnvironmentConfig.usersCollection)
+            .doc(user.uid)
+            .update({
+          'username': username.toLowerCase(),
+          'updatedAt': DateTime.now(),
         });
+
+        log('Username updated successfully');
       }
     } catch (e) {
-      log('Error reserving username: $e');
+      log('Error updating username: $e');
       throw e;
     }
   }
