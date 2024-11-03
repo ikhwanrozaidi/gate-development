@@ -26,6 +26,68 @@ class VerifyPage extends ConsumerStatefulWidget {
 class _VerifyPageState extends ConsumerState<VerifyPage> {
   bool isOtpVerified = false;
   bool isSendOtp = false;
+  final TextEditingController _usernameController = TextEditingController();
+
+  Color _getBorderColor(VerifyState state) {
+    if (state is VerifyLoaded) {
+      switch (state.usernameStatus) {
+        case UsernameStatus.available:
+          return Colors.green;
+        case UsernameStatus.taken:
+          return Colors.red;
+        case UsernameStatus.checking:
+          return Colors.blue;
+        case UsernameStatus.invalid:
+          return Colors.orange;
+        default:
+          return Colors.transparent;
+      }
+    }
+    return Colors.transparent;
+  }
+
+  Widget? _getSuffixIcon(VerifyState state) {
+    if (state is VerifyLoaded) {
+      switch (state.usernameStatus) {
+        case UsernameStatus.available:
+          return Icon(Icons.check_circle, color: Colors.green);
+        case UsernameStatus.taken:
+          return Icon(Icons.error, color: Colors.red);
+        case UsernameStatus.checking:
+          return SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          );
+        case UsernameStatus.invalid:
+          return Icon(Icons.warning, color: Colors.orange);
+        default:
+          return null;
+      }
+    }
+    return null;
+  }
+
+  String? _getHelperText(VerifyState state) {
+    if (state is VerifyLoaded) {
+      switch (state.usernameStatus) {
+        case UsernameStatus.available:
+          return 'Username is available';
+        case UsernameStatus.taken:
+          return 'Username is already taken';
+        case UsernameStatus.checking:
+          return 'Checking availability...';
+        case UsernameStatus.invalid:
+          return 'Username must be 3-20 characters (letters, numbers, underscore)';
+        default:
+          return null;
+      }
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -316,21 +378,51 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                controller: _usernameController,
                 style: TextStyle(
                   fontFamily: tSecondaryFont,
                   fontWeight: FontWeight.w500,
                 ),
+                onChanged: (value) {
+                  // Debounce the username check to avoid too many calls
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    if (_usernameController.text == value) {
+                      ref
+                          .read(verifyNotifierProvider.notifier)
+                          .checkUsername(value);
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: tPrimaryBackground,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  suffixIcon: _getSuffixIcon(state),
+                  helperText: _getHelperText(state),
+                  helperStyle: TextStyle(
+                    color: _getBorderColor(state),
                   ),
                 ),
-                validator: (value) {
-                  return null;
-                },
               ),
               SizedBox(height: 20),
               Text(

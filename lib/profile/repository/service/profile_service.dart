@@ -49,7 +49,11 @@ class ProfileApiService extends ProfileService {
           Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
           data['userId'] = user.uid;
 
-          // log('getUserDetails: $data');
+          // Convert Timestamp to String if needed
+          if (data['updatedAt'] is Timestamp) {
+            data['updatedAt'] =
+                (data['updatedAt'] as Timestamp).toDate().toIso8601String();
+          }
 
           return UserModel.fromJson(data);
         } else {

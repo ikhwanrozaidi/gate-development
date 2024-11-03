@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../authentication/signup/repository/data-classes/user_model.dart';
 
 abstract class VerifyState extends Equatable {
   const VerifyState();
@@ -12,7 +11,14 @@ class VerifyInitial extends VerifyState {}
 
 class VerifyLoading extends VerifyState {}
 
-class VerifyLoaded extends VerifyState {}
+class VerifyLoaded extends VerifyState {
+  final UsernameStatus? usernameStatus;
+
+  const VerifyLoaded({this.usernameStatus});
+
+  @override
+  List<Object?> get props => [usernameStatus];
+}
 
 class VerifyError extends VerifyState {
   final String error;
@@ -22,3 +28,5 @@ class VerifyError extends VerifyState {
   @override
   List<Object?> get props => [error];
 }
+
+enum UsernameStatus { available, taken, checking, invalid, none }

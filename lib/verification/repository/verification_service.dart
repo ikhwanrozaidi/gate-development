@@ -35,4 +35,45 @@ class VerifyApiService extends VerifyService {
     required this.auth,
     required this.storageService,
   });
+
+  Future<bool> isUsernameAvailable(String username) async {
+    try {
+      if (username.isEmpty) return false;
+
+      // First check the reserved usernames collection
+      DocumentSnapshot usernameDoc = await FirebaseFirestore.instance
+          .collection('staging')
+          .doc('staging')
+          .collection('usernames')
+          .doc(username.toLowerCase())
+          .get();
+
+      return !usernameDoc.exists;
+    } catch (e) {
+      log('Error checking username: $e');
+      throw e;
+    }
+  }
+
+  Future<void> reserveUsername(String username) async {
+    try {
+      User? user = auth.currentUser;
+      if (user != null) {
+        // Add username to reserved collection
+        await FirebaseFirestore.instance
+            .collection('staging')
+            .doc('staging')
+            .collection('usernames')
+            .doc(username.toLowerCase())
+            .set({
+          'userId': user.uid,
+          'username': username,
+          'reservedAt': DateTime.now(),
+        });
+      }
+    } catch (e) {
+      log('Error reserving username: $e');
+      throw e;
+    }
+  }
 }
