@@ -1,15 +1,37 @@
 import 'package:equatable/equatable.dart';
+import '../repository/data-classes/order_history_model.dart';
 
-sealed class TransactionboardState extends Equatable {
+abstract class TransactionboardState extends Equatable {
   const TransactionboardState();
+
   @override
   List<Object?> get props => [];
 }
 
-final class TransactionboardInitial extends TransactionboardState {}
+class TransactionboardInitial extends TransactionboardState {}
 
-final class TransactionboardLoading extends TransactionboardState {}
+class TransactionboardLoading extends TransactionboardState {}
 
-class TransactionboardLoaded extends TransactionboardState {}
+class TransactionboardLoaded extends TransactionboardState {
+  final double withheldPayment;
+  final double awaitingPayment;
+  final List<OrderHistory> ongoingOrders;
 
-final class TransactionboardError extends TransactionboardState {}
+  const TransactionboardLoaded({
+    required this.withheldPayment,
+    required this.awaitingPayment,
+    required this.ongoingOrders,
+  });
+
+  @override
+  List<Object?> get props => [withheldPayment, awaitingPayment, ongoingOrders];
+}
+
+class TransactionboardError extends TransactionboardState {
+  final String error;
+
+  const TransactionboardError(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}

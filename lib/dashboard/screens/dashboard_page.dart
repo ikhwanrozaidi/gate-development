@@ -116,7 +116,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                           ),
                         ),
                         Text(
-                          '${getGreeting()}, ${state.userData.lastName}!',
+                          '${getGreeting()}, ${state.userData.firstName}!',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: w * 0.045,

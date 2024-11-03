@@ -56,7 +56,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           SnackBar(content: Text('Email already exists')),
         );
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => SignUpForm1(
@@ -354,8 +354,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pop(context);
-                              Navigator.push(
+                              // Navigator.pop(context);
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => SignInPage()),

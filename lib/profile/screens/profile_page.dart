@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gatepay_convert/authentication/onboarding/screens/onboarding_page.dart';
 import 'package:gatepay_convert/verification/screens/verification_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -382,7 +383,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           // Navigate to the sign-in page
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (context) => SignInPage()),
+                                builder: (context) => OnboardingPage()),
                             (Route<dynamic> route) => false,
                           );
                         } catch (e) {

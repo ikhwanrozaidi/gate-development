@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -12,22 +11,34 @@ import '../../../../shared/utils/theme.dart';
 import '../../notifier/escrowpay_notifier.dart';
 import '../../notifier/escrowpay_state.dart';
 
-class EscrowpayForm2 extends ConsumerStatefulWidget {
+class EscrowpayForm1 extends ConsumerStatefulWidget {
   final String? title;
-  const EscrowpayForm2({
+  final String? productName;
+  final String? productDesc;
+  final double? priceActual;
+  final double? priceCharge;
+
+  const EscrowpayForm1({
     Key? key,
     this.title,
+    this.productName,
+    this.productDesc,
+    this.priceActual,
+    this.priceCharge,
   }) : super(key: key);
 
   @override
-  ConsumerState<EscrowpayForm2> createState() => _EscrowpayForm2State();
+  ConsumerState<EscrowpayForm1> createState() => _EscrowpayForm1State();
 }
 
-class _EscrowpayForm2State extends ConsumerState<EscrowpayForm2> {
+class _EscrowpayForm1State extends ConsumerState<EscrowpayForm1> {
+  final TextEditingController _receipientUsername = TextEditingController();
+
   bool hasAccount = true;
   bool _agreedToPPRF = false;
   bool _agreedToGP = false;
   bool _agreedTo3 = false;
+  bool _isProcessing = false;
 
   void _toggleAgreedToPPRF(bool? newValue) {
     setState(() {
@@ -45,6 +56,109 @@ class _EscrowpayForm2State extends ConsumerState<EscrowpayForm2> {
     setState(() {
       _agreedTo3 = newValue!;
     });
+  }
+
+  Color _getBorderColor(EscrowpayState state) {
+    if (state is EscrowpayLoaded) {
+      switch (state.usernameStatus) {
+        case UsernameStatus.valid:
+          return Colors.green;
+        case UsernameStatus.invalid:
+          return Colors.red;
+        case UsernameStatus.nouser:
+          return Colors.orange;
+        case UsernameStatus.checking:
+          return Colors.blue;
+        default:
+          return Colors.transparent;
+      }
+    }
+    return Colors.transparent;
+  }
+
+  String? _getHelperText(EscrowpayState state) {
+    if (state is EscrowpayLoaded) {
+      switch (state.usernameStatus) {
+        case UsernameStatus.valid:
+          return '';
+        case UsernameStatus.invalid:
+          return 'Please enter a valid username';
+        case UsernameStatus.nouser:
+          return 'No user with entered username';
+        case UsernameStatus.checking:
+          return 'Checking availability...';
+        default:
+          return null;
+      }
+    }
+    return null;
+  }
+
+  void _handleComplete() async {
+    // Validate inputs and agreements
+    if (_receipientUsername.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Please enter ${hasAccount ? "username" : "phone number"}')),
+      );
+      return;
+    }
+
+    if (!_agreedToPPRF || !_agreedToGP || !_agreedTo3) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please agree to all terms and conditions')),
+      );
+      return;
+    }
+
+    final state = ref.read(escrowpayNotifierProvider);
+    if (state is EscrowpayLoaded &&
+        state.usernameStatus != UsernameStatus.valid &&
+        hasAccount) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid username')),
+      );
+      return;
+    }
+
+    try {
+      setState(() {
+        _isProcessing = true;
+      });
+
+      await ref.read(escrowpayNotifierProvider.notifier).createTransaction(
+            productName: widget.productName ?? '',
+            description: widget.productDesc ?? '',
+            actualPrice: widget.priceActual ?? 0.0,
+            chargePrice: widget.priceCharge ?? 0.0,
+            sellerUsername: _receipientUsername.text,
+            onSuccess: () {
+              // Show success message and navigate
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Transaction created successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            onError: (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+          );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    }
   }
 
   @override
@@ -240,21 +354,49 @@ class _EscrowpayForm2State extends ConsumerState<EscrowpayForm2> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                controller: _receipientUsername,
                 style: TextStyle(
                   fontFamily: tSecondaryFont,
                   fontWeight: FontWeight.w500,
                 ),
+                onChanged: (value) {
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    if (_receipientUsername.text == value) {
+                      ref
+                          .read(escrowpayNotifierProvider.notifier)
+                          .checkUsername(value);
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: tPrimaryBackground,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: _getBorderColor(state),
+                      width: 2,
+                    ),
+                  ),
+                  helperText: _getHelperText(state),
+                  helperStyle: TextStyle(
+                    color: _getBorderColor(state),
                   ),
                 ),
-                validator: (value) {
-                  return null;
-                },
               ),
               SizedBox(height: 40),
               Row(
@@ -344,11 +486,7 @@ class _EscrowpayForm2State extends ConsumerState<EscrowpayForm2> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      //Temporary
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
+                    onPressed: _isProcessing ? null : _handleComplete,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: tPrimaryColor,
@@ -359,7 +497,16 @@ class _EscrowpayForm2State extends ConsumerState<EscrowpayForm2> {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    child: Text('Complete', style: TextStyle(fontSize: 16)),
+                    child: _isProcessing
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text('Complete', style: TextStyle(fontSize: 16)),
                   ),
                 ],
               ),

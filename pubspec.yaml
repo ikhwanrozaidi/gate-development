@@ -35,6 +35,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
   json_serializable: ^6.7.1
   build_runner: ^2.4.6
@@ -68,3 +69,4 @@ flutter:
         - asset: assets/fonts/Inter-Regular.ttf
         - asset: assets/fonts/Inter-Medium.ttf
         - asset: assets/fonts/Inter-Light.ttf
+

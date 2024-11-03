@@ -1,15 +1,59 @@
 import 'package:equatable/equatable.dart';
 
-sealed class EscrowpayState extends Equatable {
+abstract class EscrowpayState extends Equatable {
   const EscrowpayState();
+
   @override
   List<Object?> get props => [];
 }
 
-final class EscrowpayInitial extends EscrowpayState {}
+class EscrowpayInitial extends EscrowpayState {}
 
-final class EscrowpayLoading extends EscrowpayState {}
+class EscrowpayLoading extends EscrowpayState {}
 
-class EscrowpayLoaded extends EscrowpayState {}
+class EscrowpayLoaded extends EscrowpayState {
+  final UsernameStatus? usernameStatus;
+  final VerificationStatus? verificationStatus;
 
-final class EscrowpayError extends EscrowpayState {}
+  const EscrowpayLoaded({
+    this.usernameStatus = UsernameStatus.none,
+    this.verificationStatus = VerificationStatus.none,
+  });
+
+  @override
+  List<Object?> get props => [usernameStatus, verificationStatus];
+
+  EscrowpayLoaded copyWith({
+    UsernameStatus? usernameStatus,
+    VerificationStatus? verificationStatus,
+  }) {
+    return EscrowpayLoaded(
+      usernameStatus: usernameStatus ?? this.usernameStatus,
+      verificationStatus: verificationStatus ?? this.verificationStatus,
+    );
+  }
+}
+
+class EscrowpayError extends EscrowpayState {
+  final String error;
+
+  const EscrowpayError(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}
+
+enum UsernameStatus {
+  valid,
+  invalid,
+  nouser,
+  checking,
+  none,
+}
+
+enum VerificationStatus {
+  none,
+  processing,
+  completed,
+  failed,
+}

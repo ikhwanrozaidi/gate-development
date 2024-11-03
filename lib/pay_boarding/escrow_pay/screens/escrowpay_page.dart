@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gatepay_convert/pay_boarding/escrow_pay/screens/widget/escrowpage_form2.dart';
+import 'package:gatepay_convert/pay_boarding/escrow_pay/screens/widget/escrowpage_form1.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -23,8 +25,10 @@ class EscrowpayPage extends ConsumerStatefulWidget {
 }
 
 class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
-  final TextEditingController youPayController = TextEditingController();
-  final TextEditingController sellerReceiveController = TextEditingController();
+  final TextEditingController _actualPriceController = TextEditingController();
+  final TextEditingController _chargePriceController = TextEditingController();
+  final TextEditingController _productName = TextEditingController();
+  final TextEditingController _productDesc = TextEditingController();
   final double incrementFactor = 0.03;
   bool _isUpdatingYouPay = false;
   bool _isUpdatingSellerReceive = false;
@@ -32,28 +36,28 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
   @override
   void initState() {
     super.initState();
-    youPayController.addListener(_onYouPayChanged);
-    sellerReceiveController.addListener(_onSellerReceiveChanged);
+    _actualPriceController.addListener(_onYouPayChanged);
+    _chargePriceController.addListener(_onSellerReceiveChanged);
   }
 
   @override
   void dispose() {
-    youPayController.removeListener(_onYouPayChanged);
-    sellerReceiveController.removeListener(_onSellerReceiveChanged);
-    youPayController.dispose();
-    sellerReceiveController.dispose();
+    _actualPriceController.removeListener(_onYouPayChanged);
+    _chargePriceController.removeListener(_onSellerReceiveChanged);
+    _actualPriceController.dispose();
+    _chargePriceController.dispose();
     super.dispose();
   }
 
   void _onYouPayChanged() {
     if (_isUpdatingYouPay) return;
     _isUpdatingSellerReceive = true;
-    if (youPayController.text.isNotEmpty) {
-      double youPay = double.tryParse(youPayController.text) ?? 0;
+    if (_actualPriceController.text.isNotEmpty) {
+      double youPay = double.tryParse(_actualPriceController.text) ?? 0;
       double sellerReceive = youPay * (1 + incrementFactor);
-      sellerReceiveController.text = sellerReceive.toStringAsFixed(2);
+      _chargePriceController.text = sellerReceive.toStringAsFixed(2);
     } else {
-      sellerReceiveController.clear();
+      _chargePriceController.clear();
     }
     _isUpdatingSellerReceive = false;
   }
@@ -61,12 +65,12 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
   void _onSellerReceiveChanged() {
     if (_isUpdatingSellerReceive) return;
     _isUpdatingYouPay = true;
-    if (sellerReceiveController.text.isNotEmpty) {
-      double sellerReceive = double.tryParse(sellerReceiveController.text) ?? 0;
+    if (_chargePriceController.text.isNotEmpty) {
+      double sellerReceive = double.tryParse(_chargePriceController.text) ?? 0;
       double youPay = sellerReceive / (1 + incrementFactor);
-      youPayController.text = youPay.toStringAsFixed(2);
+      _actualPriceController.text = youPay.toStringAsFixed(2);
     } else {
-      youPayController.clear();
+      _actualPriceController.clear();
     }
     _isUpdatingYouPay = false;
   }
@@ -194,6 +198,7 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    controller: _productName,
                     style: TextStyle(
                       fontFamily: tSecondaryFont,
                       fontWeight: FontWeight.w500,
@@ -220,6 +225,7 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    controller: _productDesc,
                     style: TextStyle(
                       fontFamily: tSecondaryFont,
                       fontWeight: FontWeight.w500,
@@ -266,7 +272,7 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: youPayController,
+                                controller: _actualPriceController,
                                 keyboardType: TextInputType.numberWithOptions(
                                     decimal: true),
                                 inputFormatters: [
@@ -304,7 +310,7 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: sellerReceiveController,
+                                controller: _chargePriceController,
                                 keyboardType: TextInputType.numberWithOptions(
                                     decimal: true),
                                 inputFormatters: [
@@ -331,10 +337,22 @@ class _EscrowpayPageState extends ConsumerState<EscrowpayPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
+                          // log('productName: ${_productName.text}');
+                          // log('productDesc: ${_productDesc.text}');
+                          // log('priceActual: ${double.parse(_actualPriceController.text)}');
+                          // log('priceCharge: ${double.parse(_chargePriceController.text)}');
+
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EscrowpayForm2()),
+                                builder: (context) => EscrowpayForm1(
+                                      productName: _productName.text,
+                                      productDesc: _productDesc.text,
+                                      priceActual: double.tryParse(
+                                          _actualPriceController.text),
+                                      priceCharge: double.tryParse(
+                                          _chargePriceController.text),
+                                    )),
                           );
                         },
                         style: ElevatedButton.styleFrom(

@@ -52,9 +52,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       );
 
       if (result['success']) {
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => AppDrawer()),
+          (Route<dynamic> route) => false,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -124,12 +125,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => OnboardingPage()),
-                        (Route<dynamic> route) => false,
-                      );
+                      Navigator.pop(context);
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //   MaterialPageRoute(
+                      //       builder: (context) => OnboardingPage()),
+                      //   (Route<dynamic> route) => false,
+                      // );
                     },
                     child: Container(
                       width: 60.0,
@@ -312,8 +313,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pop(context);
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => SignUpPage()),

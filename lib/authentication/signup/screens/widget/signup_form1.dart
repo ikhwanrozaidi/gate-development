@@ -40,7 +40,7 @@ class _SignUpForm1State extends ConsumerState<SignUpForm1> {
       return text[0].toUpperCase() + text.substring(1).toLowerCase();
     }
 
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => SignUpForm2(

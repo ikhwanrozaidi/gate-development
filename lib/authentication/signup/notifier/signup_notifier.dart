@@ -31,10 +31,14 @@ class SignUpNotifier extends AutoDisposeNotifier<SignUpState> {
   Future<void> signUp(String email, String password,
       Map<String, dynamic> additionalData) async {
     state = SignUpLoading();
-    var rng = Random();
-    var randomNumber = (rng.nextInt(9000000000000) + 1000000000000);
 
-    additionalData['accountNumber'] = randomNumber.toString();
+    String randomNumber = '';
+    var rng = Random();
+    for (int i = 0; i < 13; i++) {
+      randomNumber += rng.nextInt(10).toString();
+    }
+
+    additionalData['accountNumber'] = randomNumber;
 
     try {
       final result =
